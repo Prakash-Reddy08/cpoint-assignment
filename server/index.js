@@ -7,7 +7,7 @@ const app = express();
 const PORT = 5000;
 connectDB();
 app.use(cors({
-    origin: "*"
+    origin: [process.env.FRONTEND_URL || 'http://localhost:3000']
 }));
 app.use(express.json());
 
