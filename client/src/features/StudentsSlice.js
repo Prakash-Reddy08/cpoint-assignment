@@ -6,19 +6,20 @@ const initialState = {
     currentPage: 1,
     studentsPerPage: 5
 }
-
+const URL = process.env.REACT_APP_BACKEND_URL
 export const getStudentsDetails = createAsyncThunk('student/getStudentsDetails', async (_, thunkAPI) => {
+    console.log(URL);
     const page = thunkAPI.getState().students.currentPage;
-    const res = await axios.get(`http://localhost:5000/api/allstudents?page=${page}`)
+    const res = await axios.get(`${URL}/allstudents?page=${page}`)
     return res.data;
 })
 export const getPaidStudents = createAsyncThunk('student/getPaidStudents', async (_, thunkAPI) => {
     const page = thunkAPI.getState().students.currentPage;
-    const res = await axios.get(`http://localhost:5000/api/paidstudents?page=${page}`)
+    const res = await axios.get(`${URL}/paidstudents?page=${page}`)
     return res.data;
 })
 export const changePaymentStatus = createAsyncThunk('student/getPaidStudents', async (id) => {
-    await axios.patch(`http://localhost:5000/api/students/${id}/updatepaymentstatus`)
+    await axios.patch(`${URL}/students/${id}/updatepaymentstatus`)
 })
 
 const studentSlice = createSlice({
