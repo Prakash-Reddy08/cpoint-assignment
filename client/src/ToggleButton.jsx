@@ -1,29 +1,29 @@
 import { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import styled from "styled-components"
-import { getPaidStudents, getStudentsDetails, setCurrentPage } from "./features/StudentsSlice"
+import { getPaidStudents, getStudentsDetails, setCurrentPage, togglePaidStudents } from "./features/StudentsSlice"
 
 const ToggleButton = ({ id }) => {
-    const { currentPage } = useSelector((state) => state.students)
-    const [isChecked, setIsChecked] = useState(false)
+    const { currentPage, showPaidStudents } = useSelector((state) => state.students)
+    // const [isChecked, setIsChecked] = useState(false)
     const dispatch = useDispatch()
     useEffect(() => {
-        if (isChecked) {
+        if (showPaidStudents) {
             dispatch(getPaidStudents())
         } else {
             dispatch(getStudentsDetails());
         }
-    }, [isChecked, currentPage])
+    }, [showPaidStudents, currentPage])
     useEffect(() => {
         dispatch(setCurrentPage(1))
-    }, [isChecked])
+    }, [showPaidStudents])
     const handleCheckBox = () => {
-        setIsChecked((prev) => !prev)
+        dispatch(togglePaidStudents(!showPaidStudents))
     }
     return (
         <Button>
             <label>
-                <input id={id} type="checkbox" onChange={handleCheckBox} defaultChecked={isChecked} />
+                <input id={id} type="checkbox" onChange={handleCheckBox} defaultChecked={showPaidStudents} />
                 <span />
             </label>
         </Button>

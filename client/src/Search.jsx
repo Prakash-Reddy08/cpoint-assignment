@@ -1,26 +1,29 @@
 import React, { useEffect, useState } from 'react'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import styled from 'styled-components'
-import { getStudentsDetails, searchStudents } from './features/StudentsSlice'
+import { getPaidStudents, getStudentsDetails, searchStudents } from './features/StudentsSlice'
 
 const Search = () => {
+    const { showPaidStudents } = useSelector((state) => state.students)
     const [searchInput, setSearchInput] = useState('')
     const dispatch = useDispatch();
     useEffect(() => {
         if (searchInput !== "") {
             dispatch(searchStudents(searchInput))
         }
+        else if (showPaidStudents) {
+            dispatch(getPaidStudents())
+        }
         else {
             dispatch(getStudentsDetails())
         }
     }, [searchInput])
-    console.log(searchInput);
     const handleInputChange = (e) => {
         setSearchInput(e.target.value)
     }
     return (
         <Wrapper>
-            <input type="text" onChange={handleInputChange} name="Search" placeholder='Search' />
+            <input type="text" onChange={handleInputChange} value={searchInput} name="Search" placeholder='Search' />
         </Wrapper>
     )
 }

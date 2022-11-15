@@ -4,11 +4,11 @@ const initialState = {
     students: [],
     totalStudents: 0,
     currentPage: 1,
-    studentsPerPage: 5
+    studentsPerPage: 5,
+    showPaidStudents: false
 }
 const URL = process.env.REACT_APP_BACKEND_URL
 export const getStudentsDetails = createAsyncThunk('student/getStudentsDetails', async (_, thunkAPI) => {
-    console.log(URL);
     const page = thunkAPI.getState().students.currentPage;
     const res = await axios.get(`${URL}/allstudents?page=${page}`)
     return res.data;
@@ -39,10 +39,12 @@ const studentSlice = createSlice({
         searchStudents: (state, action) => {
             const foundStudents = state.students.filter((item) => {
                 const name = item.first_name + " " + item.last_name;
-                console.log(name);
                 return name?.toLowerCase().includes(action.payload.toLowerCase()) || item.email_id.toLowerCase().includes(action.payload.toLowerCase())
             })
             state.students = foundStudents;
+        },
+        togglePaidStudents: (state, action) => {
+            state.showPaidStudents = action.payload
         }
     },
     extraReducers: {
@@ -57,6 +59,6 @@ const studentSlice = createSlice({
     }
 });
 
-export const { setStudents, setPaymentStatus, searchStudents, setCurrentPage } = studentSlice.actions;
+export const { setStudents, setPaymentStatus, searchStudents, setCurrentPage, togglePaidStudents } = studentSlice.actions;
 
 export default studentSlice.reducer;
